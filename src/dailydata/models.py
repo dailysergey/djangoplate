@@ -1,15 +1,41 @@
 from django.db import models
-
+from .utils import from_cyrillic_to_eng
 # Create your models here.
 
 
 class City(models.Model):
-	name = models.CharField(max_length=50)
-	# blank - means may be null
-	slug = models.CharField(max_length=50, blank=True)
-	class Meta:
-		verbose_name = 'Название неселенного пункта'
-		verbose_name_plural = 'Название населенных пунктов'
+    name = models.CharField(
+        max_length=50, verbose_name='Название неселенного пункта', unique=True)
+    # blank - means may be null
+    slug = models.CharField(max_length=50, blank=True, unique=True)
 
-	def __str__(self):
-		return self.name
+    class Meta:
+        verbose_name = 'Название неселенного пункта'
+        verbose_name_plural = 'Название населенных пунктов'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = from_cyrillic_to_eng(str(self.name))
+        super().save(*args, **kwargs)
+
+
+class Language(models.Model):
+    name = models.CharField(
+        max_length=50, verbose_name='Язык программирования', unique=True)
+    # blank - means may be null
+    slug = models.CharField(max_length=50, blank=True, unique=True)
+
+    class Meta:
+        verbose_name = 'Язык программирования'
+        verbose_name_plural = 'Языки программирования'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = from_cyrillic_to_eng(str(self.name))
+        super().save(*args, **kwargs)
