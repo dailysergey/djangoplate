@@ -1,0 +1,2 @@
+# djangoplate
+site on django
