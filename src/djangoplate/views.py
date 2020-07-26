@@ -1,5 +1,9 @@
 from django.shortcuts import render
+import datetime
 
 
 def home(request):
-    return render(request, 'home.html')
+    date = datetime.datetime.now().date()
+    name = 'Daily_sergey'
+    _context = {'date': date, 'name': name}
+    return render(request, 'home.html', context=_context)
